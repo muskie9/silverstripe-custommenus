@@ -34,7 +34,19 @@ class CustomMenuHolder_SubsiteExtension extends DataExtension {
 
         // If you're querying by ID, ignore the sub-site - this is a bit ugly...
         // if(!$query->where || (strpos($query->where[0], ".\"ID\" = ") === false && strpos($query->where[0], ".`ID` = ") === false && strpos($query->where[0], ".ID = ") === false && strpos($query->where[0], "ID = ") !== 0)) {
-        if (!$query->where || (!preg_match('/\.(\'|"|`|)ID(\'|"|`|)( ?)=/', $query->where[0]))) {
+        if(isset($query->where[0]) && is_array($query->where[0])){
+            $where = $query->where[0];
+            if(isset($where['"CustomMenuHolder"."SubsiteID" = ?'])){
+                $where = '"CustomMenuHolder"."SubsiteID" = ' . "{$where['"CustomMenuHolder"."SubsiteID" = ?'][0]}";
+            }
+        }else{
+            if(isset($query->where)){
+                $where = $query->where;
+            }else{
+                $where = null;
+            }
+        }
+        if (!$where || (!preg_match('/\.(\'|"|`|)ID(\'|"|`|)( ?)=/', $where))) {
 
             if (Subsite::$force_subsite) $subsiteID = Subsite::$force_subsite;
             else {
