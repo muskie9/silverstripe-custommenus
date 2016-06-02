@@ -38,12 +38,14 @@ class CustomMenuHolder_SubsiteExtension extends DataExtension {
             $where = $query->where[0];
             if(isset($where['"CustomMenuHolder"."SubsiteID" = ?'])){
                 $where = '"CustomMenuHolder"."SubsiteID" = ' . "{$where['"CustomMenuHolder"."SubsiteID" = ?'][0]}";
+            }else{
+                $where = '';
             }
         }else{
             if(isset($query->where)){
                 $where = $query->where;
             }else{
-                $where = null;
+                $where = '';
             }
         }
         if (!$where || (!preg_match('/\.(\'|"|`|)ID(\'|"|`|)( ?)=/', $where))) {
